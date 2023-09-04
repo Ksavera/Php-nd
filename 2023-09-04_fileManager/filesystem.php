@@ -1,6 +1,6 @@
 <?php 
 echo '<pre>';
-$directories = scandir('./directories');
+$directories = scandir('.');
 
 
 
@@ -18,14 +18,7 @@ $directories = scandir('./directories');
 </head>
 <body>
   <div class="container mt-5">
-  <?php 
-// file_get_contents('http://localhost/php_nd/2023-09-04_fileManager')
-if(is_dir('directories')) {
-  echo '<p style="color:red">This is directory</p>';
-} else {
-  echo 'smth wrong';
-}
-?>
+
      <table class="table">
     <thead>
       <tr>
@@ -39,12 +32,17 @@ if(is_dir('directories')) {
     </thead>
     <tbody>
       <?php foreach($directories as $directory){
+        // pathinfo($directory);
+        $size = filesize($directory);
+        $isFolderOrSize = is_dir($directory)? "Folder" : "$size bytes";
+        if($directory !== "." AND $directory !== "..")
         echo " <tr>
         <td><input type='checkbox' class='form-check-input'></td>
-        <td><a href='./directories/$directory'>$directory</a></td>
-        <td><a href='#'><?php include 'directory_size.php'; ?></a></td>
+        <td><a href='http://localhost/php_nd/2023-09-04_fileManager/$directory'>$directory</a></td>
+        <td>$isFolderOrSize</td>
       </tr>";
-      } ?>
+      } 
+      ?>
      
     </tbody>
   </table>
