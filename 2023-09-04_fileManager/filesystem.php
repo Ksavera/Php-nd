@@ -1,6 +1,9 @@
 <?php 
-echo '<pre>';
-$directories = scandir('.');
+
+$path = isset($_GET['path']) ? $_GET['path'] : ('.');
+$files = scandir($path);
+unset($files[0]);
+if($path === ".") unset($files[1]);
 
 
 
@@ -31,18 +34,52 @@ $directories = scandir('.');
       
     </thead>
     <tbody>
-      <?php foreach($directories as $directory){
-        // pathinfo($directory);
-        $size = filesize($directory);
-        $isFolderOrSize = is_dir($directory)? "Folder" : "$size bytes";
-        if($directory !== "." AND $directory !== "..")
-        echo " <tr>
+      <?php foreach($files as $file){
+        
+// ikonos prie failu
+        $kintamasis = pathinfo($file);
+        if(array_key_exists('extension', $kintamasis)) {
+          if($kintamasis['extension'] === "php") {
+            $ikonos_klase = "bi bi-filetype-php";
+          } else if($kintamasis['extension'] === "md") {
+            $ikonos_klase = "bi bi-filetype-md";
+          }else if($kintamasis['extension'] === "txt") {
+            $ikonos_klase = "bi bi-filetype-txt";
+          }else if($kintamasis['extension'] === "html") {
+            $ikonos_klase = "bi bi-filetype-html";
+          } else {
+            $ikonos_klase = "";
+          }
+        } else {
+          $ikonos_klase = "bi bi-folder2";
+        }
+
+// rodo size arba folder
+        $realfile = "$path/$file";
+        $size = filesize($realfile);
+        $isFolderOrSize = is_file($realfile)? "$size b" : "folder";
+
+//grizineja atgal ir pirmyn per viena direktorija
+        if ($file === ".." && $path !== ".") {
+          $link = "<a href='?path=" . dirname($path) . "'><i class='bi bi-arrow-left-circle-fill'>$file</i></a>";
+      } else {
+          $link = "<a href='?path=" . "$path/$file" . "'>$file</a>";
+      }
+
+// nerodo directorijos . ir filesystem.php 
+        if($file !== "." AND $file !== "filesystem.php") {
+          echo " <tr>
         <td><input type='checkbox' class='form-check-input'></td>
-        <td><a href='http://localhost/php_nd/2023-09-04_fileManager/$directory'>$directory</a></td>
+        <td>
+        <i class='$ikonos_klase'></i>
+        <a href='?path=$realfile'>$link</a></td>
         <td>$isFolderOrSize</td>
+        <td></td>
+        <td></td>
       </tr>";
       } 
-      ?>
+    }
+    ?>
      
     </tbody>
   </table>
