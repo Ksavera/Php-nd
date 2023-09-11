@@ -21,26 +21,3 @@ if ($_FILES['uploadFile']['size'] > 250000000) {
     }
 }
 ?>
-
-
-// $path = isset($_GET['path']) ? $_GET['path'] : '.';
-// $upload = isset($_FILES['uploadFile']) ? $_FILES['uploadFile'] : null;
-// if ($upload && $upload['size'] > 25000000) {
-// echo 'Failo dydis per didelis';
-// } else {
-// if (
-// $upload &&
-// $upload['type'] !== 'image/png' &&
-// $upload['type'] !== 'image/jpeg' &&
-// $upload['type'] !== 'image/gif'
-// ) {
-// echo 'Netinkamas failo formatas';
-// } else {
-// if ($upload) {
-// move_uploaded_file($upload['tmp_name'], './uploads/' . $upload['name']);
-// echo 'Failas sekmingai ikeltas';
-// }
-
-// header("Location: ?path=$path");
-// }
-// }
