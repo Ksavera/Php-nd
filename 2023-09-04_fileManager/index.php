@@ -6,7 +6,8 @@ unset($files[0]);
 if ($path === ".") unset($files[1]);
 
  //------------------------delete-------------------------------------------------------------------
- function removeRecursively($dir) {
+function removeRecursively($dir)
+{
     if (is_dir($dir)) {
         $objects = scandir($dir);
         foreach ($objects as $object) {
@@ -68,7 +69,6 @@ if (isset($_POST['deleteSelected'])) {
         exit;
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -122,7 +122,7 @@ if (isset($_POST['deleteSelected'])) {
     </header>
 
     <div class="container">
-    <form method="post">
+    <form method="POST">
         <table class="table mt-5">
             <thead>
                 <tr>
@@ -138,6 +138,7 @@ if (isset($_POST['deleteSelected'])) {
                 <?php
 
                 foreach ($files as $file) {
+                    $fileToDelete = isset($_POST['selectedFiles']) ? $_POST['selectedFiles'] : [];
                     //--------------------------edit------------------------------------------------------------------
 
                     $editMode = isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['file']) && $_GET['file'] === $file;
@@ -214,7 +215,7 @@ if (isset($_POST['deleteSelected'])) {
                     // nerodo directorijos . ir index.php 
                     if ($file !== "." && $file !== "index.php" && $file !== "newItem.php" && $file !== "receiveFormData1.php" && $file !== "uploadForm.php") {
                         echo " <tr>
-        <td><input type='checkbox' class='form-check-input'></td>
+        <td><input type='checkbox' class='form-check-input' name='selectedFiles[]' value='$file'></td>
         <td>
         <i class='$icon_class'></i>$link $form</td>
         <td>$isFolderOrSize</td>
