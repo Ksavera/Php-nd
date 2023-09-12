@@ -1,20 +1,20 @@
 <?php
-// if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // print_r($_POST);
-  
+$path = isset($_GET['path']) ? $_GET['path'] : '.';
 
 $fileType = isset($_POST['itemType']) ? $_POST['itemType'] : null;
 $fileName = isset($_POST['inputName']) ? $_POST['inputName'] : null;
 $pathPart = pathinfo($fileName);
+
+$filePath = $path . '/' . $fileName;
 
 if ($fileType === "file" && $fileName) {
     if (array_key_exists('extension', $pathPart)) {
         if ($pathPart['extension'] === '') {
             echo '<p class="center-text">Must enter an extension to create a file.</p>';
         } else {
-            $myfile = fopen($fileName, "w") or die("Unable to open file!");
+            $myfile = fopen($filePath, "w") or die("Unable to open file!");
             fclose($myfile);
-            header('Location: ./');
+            header('Location: index.php?path=' . $path);
         }
     } else {
         echo 'Invalid file name format. Make sure to include an extension.';
@@ -23,14 +23,12 @@ if ($fileType === "file" && $fileName) {
     if (strpos($fileName, '.') !== false) {
         echo '<p class="center-text">Must enter folder name without extension.</p>';
     } else {
-        mkdir($fileName);
-        header('Location: ./');
+        mkdir($filePath);
+        header('Location: index.php?path=' . $path);
     }
 }
-
-
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

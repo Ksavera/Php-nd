@@ -1,6 +1,9 @@
 <?php
 ob_start(); // Start output buffering
 $path = isset($_GET['path']) ? $_GET['path'] : '.';
+if (!is_dir($path)) {
+    die('Invalid directory path: ' . $path);
+}
 $files = scandir($path);
 unset($files[0]);
 if ($path === ".") unset($files[1]);
@@ -22,13 +25,13 @@ function removeRecursively($dir)
         rmdir($dir);
     }
 }
-
+$disallowedFiles = ["index.php", "receiveFormData1.php", "uploadForm.php"];
 $deleteMode = isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['file']);
 if ($deleteMode) {
     $fileToDelete = $_GET['file']; // Get the file to be deleted
 
     // Disallowed files
-    $disallowedFiles = ["index.php", "receiveFormData1.php", "uploadForm.php"];
+    
 
     if (!in_array($fileToDelete, $disallowedFiles)) {
         $deleteitem = $path . '/' . $fileToDelete; // Use the correct file name
@@ -40,7 +43,6 @@ if ($deleteMode) {
             // Remove a file
             unlink($deleteitem);
         }
-
         header("Location: ?path=$path");
     }
 }
@@ -48,12 +50,8 @@ if ($deleteMode) {
 if (isset($_POST['deleteSelected'])) {
     if (isset($_POST['selectedFiles'])) {
         foreach ($_POST['selectedFiles'] as $fileToDelete) {
-            // Disallowed files
-            $disallowedFiles = ["index.php", "receiveFormData1.php", "uploadForm.php"];
-
             if (!in_array($fileToDelete, $disallowedFiles)) {
                 $deleteitem = $path . '/' . $fileToDelete;
-
                 if (is_dir($deleteitem)) {
                     // Remove the folder and its contents
                     removeRecursively($deleteitem);
@@ -63,7 +61,6 @@ if (isset($_POST['deleteSelected'])) {
                 }
             }
         }
-
         // After deleting selected files, redirect back to the same page
         header("Location: ?path=$path");
         exit;
@@ -110,7 +107,7 @@ if (isset($_POST['deleteSelected'])) {
                         </a>
                     </li>
                     <li class="newItem">
-                    <a href="newItem.php" class="link-secondary link-underline link-underline-opacity-0">
+                    <a href="newItem.php?path=<?php echo $path; ?>" class="link-secondary link-underline link-underline-opacity-0">
                          <i class="bi bi-plus-square"></i>  
                             <span>New Item</span>
                         </a>
@@ -126,7 +123,7 @@ if (isset($_POST['deleteSelected'])) {
         <table class="table mt-5">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="checkAll" class="form-check-input"></th>
+                    <th><input type="checkbox" onclick="selectAll(event)" class="form-check-input"></th>
                     <th>Name</th>
                     <th>Size</th>
                     <th>Modified</th>
@@ -177,6 +174,20 @@ if (isset($_POST['deleteSelected'])) {
                             $icon_class = "bi bi-filetype-html";
                         } else if ($kintamasis['extension'] === "jpg") {
                             $icon_class = "bi bi-image";
+                        } else if ($kintamasis['extension'] === "png") {
+                            $icon_class = "bi bi-image";
+                        } else if ($kintamasis['extension'] === "git") {
+                            $icon_class = 'bi bi-github';
+                        } else if ($kintamasis['extension'] === "php") {
+                            $icon_class = 'bi bi-filetype-php';
+                        } else if ($kintamasis['extension'] === "pdf") {
+                            $icon_class = 'bi bi-file-earmark-pdf-fill';
+                        } else if ($kintamasis['extension'] === "gif") {
+                            $icon_class = 'bi bi-filetype-gif';
+                        } else if ($kintamasis['extension'] === "mp3") {
+                            $icon_class = 'bi bi-file-earmark-music';
+                        } else if ($kintamasis['extension'] === "mp4") {
+                            $icon_class = 'bi bi-play-circle';
                         } else {
                             $icon_class = "";
                         }
@@ -236,7 +247,15 @@ if (isset($_POST['deleteSelected'])) {
             </div>
         </form>
     </div>
-    
+  <script>
+      function selectAll(e) {
+        const checkAll = document.querySelectorAll('input[type="checkbox"]');
+        checkAll.forEach((el) => {
+            el.checked = !el.checked;
+        });
+    }
+</script>  
 </body>
+
 
 </html>
