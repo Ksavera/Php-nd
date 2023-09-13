@@ -1,9 +1,11 @@
 <?php
 ob_start(); // Start output buffering
-$path = isset($_GET['path']) ? $_GET['path'] : '.';
+$path = isset($_GET['path']) ? urldecode($_GET['path']) : '.';
+
 if (!is_dir($path)) {
     die('Invalid directory path: ' . $path);
 }
+
 $files = scandir($path);
 unset($files[0]);
 if ($path === ".") unset($files[1]);
@@ -25,7 +27,7 @@ function removeRecursively($dir)
         rmdir($dir);
     }
 }
-$disallowedFiles = ["index.php", "receiveFormData1.php", "uploadForm.php"];
+$disallowedFiles = ["index.php", "receiveFormData1.php", "uploadForm.php", "uploads"];
 $deleteMode = isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['file']);
 if ($deleteMode) {
     $fileToDelete = $_GET['file']; // Get the file to be deleted
@@ -136,12 +138,13 @@ if (isset($_POST['deleteSelected'])) {
 
                 foreach ($files as $file) {
                     $fileToDelete = isset($_POST['selectedFiles']) ? $_POST['selectedFiles'] : [];
-                    //--------------------------edit------------------------------------------------------------------
+
+//--------------------------edit------------------------------------------------------------------
 
                     $editMode = isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['file']) && $_GET['file'] === $file;
                     if ($editMode) {
                         $editFile = pathinfo($_GET['file']);
-                        $editFileName = $editFile['basename'];
+                        $editFileName = pathinfo($_GET['file'], PATHINFO_FILENAME);
 
                         $form = "<form method='POST'>
                         <div class='input-group'>
@@ -154,14 +157,15 @@ if (isset($_POST['deleteSelected'])) {
                     }
 
                     if ($editMode && isset($_POST['newName'])) {
-                        rename("$path/$file", "$path/" . $_POST['newName']);
+                        $newName = $_POST['newName'] . '.' . pathinfo($_GET['file'], PATHINFO_EXTENSION);
+                        rename("$path/$file", "$path/$newName");
                         $editedFileDirectory = dirname("$path/$file");
                         header("Location: ?path=$editedFileDirectory");
-                        exit; // Add exit to stop further execution
+                        exit;
                     }
                    
 
-                    //------------------------ikonos prie failu---------------------------------------------------------
+//------------------------ikonos prie failu---------------------------------------------------------
                     $kintamasis = pathinfo($file);
                     if (array_key_exists('extension', $kintamasis)) {
                         if ($kintamasis['extension'] === "php") {
@@ -195,8 +199,10 @@ if (isset($_POST['deleteSelected'])) {
                         $icon_class = "bi bi-folder2";
                     }
 
-                    // rodo size arba folder
+// --------------------------------rodo size arba folder----------------------------------------------
                     $realfile = "$path/$file";
+                    $isDirectory = is_dir($realfile);
+                    
                     $size = filesize($realfile);
                     if ($size >= 1048576) {
                         $size = round($size / 1024) . " mb";
@@ -206,25 +212,30 @@ if (isset($_POST['deleteSelected'])) {
                         $size = $size . " b";
                     }
 
-                    // Size or Folder
+//------------------------------------- Size or Folder--------------------------------------------------
+
                     $FolderOrEmpty = ($file === "..") ? "" : "Folder";
                     $isFolderOrSize = is_file($realfile) ? $size : $FolderOrEmpty;
-                    // Modifikuoto failo data
-                    $laikas = ($file !== "..") ? date("d/m/Y h:i A", filemtime($realfile)) : "";
-                    //icons
-                    $delete_icon = ($file === ".."  && !$deleteMode || $file === "uploadForm.php" || $file === "receiveFormData1.php") ? "" : "bi bi-trash";
-                    $edit_icon = ($file === ".." && !$editMode || $file === "uploadForm.php" || $file === "receiveFormData1.php") ? "" : "bi bi-pencil-square";
-                    // $upload_icon = ($file === "..") ? "" : "bi bi-upload";
+//-------------------------------- Modifikuoto failo data-----------------------------------------------
 
-                    //grizineja atgal ir pirmyn per viena direktorija
+                    $laikas = ($file !== "..") ? date("d/m/Y h:i A", filemtime($realfile)) : "";
+//---------------------------------------icons------------------------------------------------------------
+
+                    $delete_icon = ($file === ".."  && !$deleteMode || $file === "uploadForm.php" || $file === "receiveFormData1.php" || $file === "uploads") ? "" : "bi bi-trash";
+
+                    $edit_icon = ($file === ".." && !$editMode || $file === "uploadForm.php" || $file === "receiveFormData1.php" || $file === "uploads" ) ? "" : "bi bi-pencil-square";
+
+//----------------------grizineja atgal ir pirmyn per viena direktorija----------------------------------
+
                     if ($file === ".." && $path !== ".") {
                         $link = "<a href='?path=" . dirname($path) . "'><i class='bi bi-arrow-left-circle-fill'></i></a>";
                     } else {
                         $link = "<a href='?path=" . "$path/$file" . "'>$file</a>";
                     }
 
-                    // nerodo directorijos . ir index.php 
-                    if ($file !== "." && $file !== "index.php" && $file !== "newItem.php" && $file !== "receiveFormData1.php" && $file !== "uploadForm.php") {
+//-------------------------------- nerodo directorijos . ir index.php -----------------------------------
+
+                    if ($file !== "." && $file !== "index.php" && $file !== "newItem.php" && $file !== "receiveFormData1.php" && $file !== "uploadForm.php" ) {
                         echo " <tr>
         <td><input type='checkbox' class='form-check-input' name='selectedFiles[]' value='$file'></td>
         <td>
