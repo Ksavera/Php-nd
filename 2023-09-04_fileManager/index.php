@@ -1,12 +1,21 @@
+
 <?php
 ob_start(); // Start output buffering
-$path = isset($_GET['path']) ? urldecode($_GET['path']) : '.';
+
+$path = isset($_GET['path'])  ? urldecode($_GET['path']) : '.';
 
 if (!is_dir($path)) {
-    die('Invalid directory path: ' . $path);
+    if (file_exists($path)) {
+        $filePath = $path;
+        include 'Views/fileInfo.php';
+        exit;
+    } else {
+        die('Invalid directory or file path: ' . $path);
+    }
 }
 
 $files = scandir($path);
+
 unset($files[0]);
 if ($path === ".") unset($files[1]);
 
@@ -79,18 +88,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : false;
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
-    <style>
-        .bi {
-            margin-right: 5px;
-        }
-
-        .upload:hover {
-            cursor: pointer;
-            color: black;
-        }
-     
-    </style>
+   
 </head>
  
 <body class="bg-secondary-subtle">
@@ -105,7 +105,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : false;
         case 'upload':
             include './Views/uploadForm.php';
             break;
-       
+        case 'fileInfo':
+            include './Views/fileInfo.php';
+            break;
         default:
             include './Views/Home.php';
     }

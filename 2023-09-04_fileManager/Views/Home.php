@@ -1,4 +1,7 @@
+<?php
 
+
+?>
 <form method="POST">
         <table class="table mt-5">
             <thead>
@@ -79,7 +82,7 @@
 
 // --------------------------------rodo size arba folder----------------------------------------------
                     $realfile = "$path/$file";
-                    $isDirectory = is_dir($realfile);
+                    
                     
                     $size = filesize($realfile);
                     if ($size >= 1048576) {
@@ -105,19 +108,26 @@
 
 //----------------------grizineja atgal ir pirmyn per viena direktorija----------------------------------
 
+
+
                     if ($file === ".." && $path !== ".") {
                         $link = "<a href='?path=" . dirname($path) . "'><i class='bi bi-arrow-left-circle-fill'></i></a>";
                     } else {
-                        $link = "<a href='?path=" . "$path/$file" . "'>$file</a>";
+                       
+                        $link = "<a href='?&path=" . "$path/$file" . "'>$file</a>";
                     }
 
+                 
 //-------------------------------- nerodo directorijos . ir index.php -----------------------------------
+
 
                     if ($file !== "." && $file !== "index.php" && $file !== "createNew.php" && $file !== "receiveFormData.php" && $file !== "uploadForm.php" ) {
                         echo " <tr>
         <td><input type='checkbox' class='form-check-input' name='selectedFiles[]' value='$file'></td>
         <td>
-        <i class='$icon_class'></i>$link $form</td>
+        <i class='$icon_class'></i>
+        <a href='?path=$path/$file'>$link $form</a>
+        </td>
         <td>$isFolderOrSize</td>
         <td>$laikas</td>
         <td>

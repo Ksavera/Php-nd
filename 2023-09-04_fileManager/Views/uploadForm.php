@@ -1,11 +1,4 @@
 
-<style>
-        .container2 {  
-            margin: 25vh;
-            width: 500px;
-            border-radius: 10px;
-        }
-</style>
     <div class="container2 mt-5 mx-auto">
         <form action="receiveFormData.php" method="POST" enctype="multipart/form-data">
             <h6 class="form-label">Upload files: </h6>

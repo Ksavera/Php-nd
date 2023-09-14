@@ -26,19 +26,7 @@ if ($fileType === "file" && $fileName) {
     }
 }
 ?>
-    <style>
-        .container2 {  
-            margin: 25vh;
-            width: 500px;
-            border-radius: 10px;
-        }
-        .center-text {
-            text-align: center !important;
-            color: red;
-        }
-    </style>
-
-    <div class="container2 bg-white my-5 p-3">
+    <div class="container2 bg-white mx-auto my-5 p-3">
         <h5 class=""><i class="newItem bi bi-plus-square mx-1"></i>Create new Item</h5>
         <hr>
         
