@@ -123,6 +123,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : false;
         checkAll.forEach((el) => {
             el.checked = !el.checked;
         });
+        
     }
 </script> 
 

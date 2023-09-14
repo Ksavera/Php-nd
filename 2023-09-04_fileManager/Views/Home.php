@@ -142,7 +142,7 @@
             </tbody>
         </table>
         <div class="mt-3 d-flex gap-3">
-                <button type="submit" name="deleteAll" class="btn btn-primary">Delete Selected</button>
+                <button type="submit" name="deleteSelected" class="btn btn-primary">Delete Selected</button>
             </div>
         </form>
  
