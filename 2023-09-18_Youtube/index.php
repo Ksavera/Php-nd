@@ -52,9 +52,8 @@ if ($resultOfCategories->num_rows > 0) {
 } else {
     echo 'error';
 }
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

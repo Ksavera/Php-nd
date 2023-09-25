@@ -9,8 +9,8 @@
             <a href="?page=videoPlayer&videoId=<?= $video['id'] ?>" class="link-dark link-underline link-underline-opacity-0">
                 <img class="w-100 rounded-3" src="<?= $video['thumbnail'] ?>" alt="">
                 <h5 class="mt-2 mb-0"><b><?= $video['video_title'] ?></b></h5>
-                <h6 class="m-0"><?= $video['author'] ?></h6>
-                <p class="text-dark">Views: <?= $video['views'] ?></p>
+                <h6 class="mb-1"><?= $video['author'] ?></h6>
+                <p class="text-secondary views">Views: <?= $video['views'] ?></p>
             </a>
         </div>
     <?php endforeach; ?>
