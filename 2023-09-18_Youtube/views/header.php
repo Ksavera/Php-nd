@@ -6,8 +6,8 @@
             </a>
         </div>
 
-        <form action="" class="input-group w-50">
-            <input type="text" class="form-control">
+        <form action="./" method="POST" class="input-group w-50">
+            <input type="text" class="form-control" name="search">
             <button class="btn btn-outline-dark px-4"><i class="bi bi-search"></i></button>
         </form>
         <h3 class="text-dark"><i class="bi bi-person-circle"></i></h3>
