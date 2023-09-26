@@ -1,3 +1,21 @@
+<?php
+if (isset($_SESSION['user_id'])) {
+    echo '<div class="alert alert-success" role="alert">
+  Congratulations, You are logged in.
+</div>';
+    header('Location: ');
+    exit; ?>
+
+
+
+<?php
+} else {
+    echo '<div class="alert alert-danger" role="alert">
+  You are not logged in. Please, log in or sign up.
+</div>';
+}
+?>
+
 <div class="d-flex mb-4 justify-content-center gap-3">
     <?php foreach ($categories as $category) : ?>
         <a href="?page=home&category=<?= $category['id'] ?>"><button class="btn btn-light"><?= $category['name'] ?></button></a>
@@ -14,4 +32,11 @@
             </a>
         </div>
     <?php endforeach; ?>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination d-flex justify-content-center mt-5">
+            <li class=" page-item"><a class="page-link text-dark" href="?page=back">Previous</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="?page=1">1</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="?page=next">Next</a></li>
+        </ul>
+    </nav>
 </div>
