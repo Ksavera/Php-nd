@@ -21,7 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows) {
             $user = $result->fetch_assoc();
             $_SESSION['user_id'] = $user['id'];
-            header('Location: ?');
+            $_SESSION['user_id'] = $user['id'];
+            header('Location: ./');
             exit;
         } else {
             $message = 'Wrong email or password';

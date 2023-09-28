@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         if ($result) {
-            header('Location: ?');
+            header('Location: ./');
             exit;
         } else {
             $message = 'This email already exists';
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <h1 class="h3 mb-3 fw-normal text-center">Sign up</h1>
         <div class="form-floating">
-            <input type="name" class="form-control" name="name" placeholder="Name">
+            <input type="text" class="form-control" name="name" placeholder="Name">
             <label for="floatingInput">Name</label>
         </div>
         <div class="form-floating">

@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
 
@@ -50,15 +53,11 @@ if ($resultOfCategories->num_rows > 0) {
 }
 
 //clickable links:
-function clickableLinks($text)
+function href($string)
 {
-    // Regular expression pattern to match URLs
-    $pattern = '/(https?:\/\/\S+\s*\/?>)/i';
-    // Replace URLs with clickable links
-    $text = preg_replace($pattern, '<a href="$1" target="_blank">$1</a>', $text);
-    return $text;
+    return preg_replace('/((http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?)/', '<a href="\1" target="_blank">\1</a>', $string);
 }
-// prisijungimo prie duomenu bazes
+
 // $db->close();
 
 ?>
@@ -79,7 +78,9 @@ function clickableLinks($text)
 
     <div class="container">
         <?php include './views/header.php' ?>
+
         <?php
+
         switch ($page) {
             case 'login':
                 include './views/login.php';
@@ -90,8 +91,12 @@ function clickableLinks($text)
             case 'videoPlayer':
                 include './views/videoPlayer.php';
                 break;
+            case 'addVideo':
+                include './views/addVideo.php';
+                break;
             case 'logout':
-                include './views/logout.php';
+                session_destroy();
+                header('Location: ./');
                 break;
             default:
                 include './views/Home.php';
