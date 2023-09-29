@@ -6,7 +6,7 @@
             </a>
         </div>
 
-        <form action="./" method="POST" class="input-group w-50">
+        <form action="./" method="GET" class="input-group w-50">
             <input type="text" class="form-control" name="search">
             <button class="btn btn-outline-dark px-4"><i class="bi bi-search"></i></button>
         </form>

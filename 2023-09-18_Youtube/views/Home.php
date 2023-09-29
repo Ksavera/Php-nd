@@ -27,12 +27,31 @@
             '<div class="alert alert-danger text-center">there is no video with this name or title.</div>';
         } ?>
 
-     <nav>
-         <a href="<?= $currentPage != 1 ? "?pg=$backPage" : '' ?>"><button class="btn btn-primary" <?= $currentPage === 1 ? "disabled" : "" ?>>Back</button></a>
+     <div class="d-flex justify-content-center gap-2">
+         <?php if ($categoryID === '' &&  !$search) : ?>
 
-         <a href="?pg= <?= $currentPage ?>"><button class="btn btn-primary"><?= $currentPage . '/' . $totalPages ?></button></a>
+             <a href="<?= $currentPage != 1 ? "?pg=$backPage" : '' ?>"><button class="btn btn-primary" <?= $currentPage === 1 ? "disabled" : "" ?>>Back</button></a>
+         <?php elseif ($search) : ?>
+             <a href="<?= $currentPage != 1 ? "?pg=$backPage&search=$search" : '' ?>"><button class="btn btn-primary" <?= $currentPage === 1 ? "disabled" : "" ?>>Back</button></a>
+         <?php else : ?>
+             <a href="<?= $currentPage != 1 ? "?pg=$backPage&category=$categoryID" : '' ?>"><button class="btn btn-primary" <?= $currentPage === 1 ? "disabled" : "" ?>>Back</button></a>
+         <?php endif; ?>
 
-         <a href="<?= $hasMoreRecords ? "?pg=$nextPage" : '' ?>"><button class="btn btn-primary" <?= $currentPage == $totalPages ? "disabled" : "active" ?>>Next</button></a>
+         <?php if ($categoryID === '' &&  !$search) : ?>
+             <a href="?pg= <?= $currentPage ?>"><button class="btn btn-primary"><?= $currentPage . '/' . $totalPages ?></button></a>
+         <?php elseif ($search) : ?>
+             <a href="?pg=<?= $currentPage ?>&search= <?= $search ?>"><button class="btn btn-primary"><?= $currentPage . '/' . $totalPages ?></button></a>
+         <?php else : ?>
+             <a href="?pg=<?= $currentPage ?>&category= <?= $categoryID ?>"><button class="btn btn-primary"><?= $currentPage . '/' . $totalPages ?></button></a>
+         <?php endif; ?>
 
-     </nav>
+         <?php if ($categoryID === '' &&  !$search) : ?>
+             <a href="<?= $hasMoreRecords ? "?pg=$nextPage" : '' ?>"><button class="btn btn-primary" <?= $currentPage == $totalPages ? "disabled" : "active" ?>>Next</button></a>
+         <?php elseif ($search) : ?>
+             <a href="<?= $hasMoreRecords ? "?pg=$nextPage&search=$search" : '' ?>"><button class="btn btn-primary" <?= $currentPage == $totalPages ? "disabled" : "active" ?>>Next</button></a>
+         <?php else : ?>
+             <a href="<?= $hasMoreRecords ? "?pg=$nextPage&category=$categoryID" : '' ?>"><button class="btn btn-primary" <?= $currentPage == $totalPages ? "disabled" : "active" ?>>Next</button></a>
+         <?php endif; ?>
+
+     </div>
  </div>

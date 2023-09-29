@@ -16,7 +16,7 @@ try {
 $categoryID = isset($_GET['category']) ? $_GET['category'] : false;
 $page = isset($_GET['page']) ? $_GET['page'] :  false;
 $videoId = isset($_GET['videoId']) ? $_GET['videoId'] : false;
-$search = isset($_POST['search']) ? $_POST['search'] : false;
+$search = isset($_GET['search']) ? $_GET['search'] : false;
 
 
 $limit = 5;
@@ -30,14 +30,13 @@ $nextPage = ($currentPage + 1);
 
 
 if ($search) {
-    $result = $db->query("SELECT * FROM videos WHERE author LIKE '%$search%' OR video_title LIKE '%$search%' ORDER BY views DESC");
+    $result = $db->query("SELECT * FROM videos WHERE author LIKE '%$search%' OR video_title LIKE '%$search%' ORDER BY views DESC LIMIT $offset, $limit");
 } elseif ($page === 'videoPlayer' && $videoId) {
     $result = $db->query("SELECT * FROM videos WHERE id=$videoId ORDER BY views DESC");
 } elseif ($categoryID) {
-    $result = $db->query("SELECT * FROM videos WHERE category_id=$categoryID ORDER BY views DESC");
+    $result = $db->query("SELECT * FROM videos WHERE category_id=$categoryID ORDER BY views DESC LIMIT $offset, $limit");
 } else {
     $result = $db->query("SELECT * FROM videos ORDER BY views DESC LIMIT $offset, $limit");
-    // print_r($result);
 }
 
 
@@ -45,8 +44,17 @@ if ($result->num_rows > 0) {
     $videos = $result->fetch_all(MYSQLI_ASSOC);
 }
 
-$count = $db->query("SELECT COUNT(id) FROM videos")->fetch_array();
-print_r($count[0]);
+
+if ($search) {
+    $count = $db->query("SELECT COUNT(id) FROM videos WHERE author LIKE '%$search%' OR video_title LIKE '%$search%'")->fetch_array();
+} elseif ($categoryID) {
+    $count = $db->query("SELECT COUNT(id) FROM videos WHERE category_id=$categoryID")->fetch_array();
+} else {
+    $count = $db->query("SELECT COUNT(id) FROM videos")->fetch_array();
+}
+
+
+// print_r($count[0]);
 $totalVideos = $count[0];
 $totalPages = ceil($totalVideos / $limit);
 
