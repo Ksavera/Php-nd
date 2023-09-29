@@ -1,6 +1,7 @@
 <?php
 $message = false;
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // The form has been submitted
     if (
@@ -15,12 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $db->query(
             sprintf("SELECT id FROM users WHERE user_name = '%s' AND email = '%s' AND password = '%s'", $_POST['name'], $_POST['email'], md5($_POST['password']))
         );
-
-
-
         if ($result->num_rows) {
             $user = $result->fetch_assoc();
-            $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_id'] = $user['id'];
             header('Location: ./');
             exit;
@@ -37,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php if ($message) : ?>
     <div class="alert alert-danger"><?= $message ?></div>
 <?php endif; ?>
+
+
 <main class="form-signin w-100 m-auto">
     <form method="POST">
 

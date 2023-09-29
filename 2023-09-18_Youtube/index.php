@@ -19,6 +19,14 @@ $videoId = isset($_GET['videoId']) ? $_GET['videoId'] : false;
 $search = isset($_POST['search']) ? $_POST['search'] : false;
 
 
+$limit = 5;
+$currentPage = isset($_GET['pg']) ? intval($_GET['pg']) : 1;
+$offset = ($currentPage - 1) * $limit;
+$backPage = ($currentPage - 1);
+$nextPage = ($currentPage + 1);
+
+
+
 
 
 if ($search) {
@@ -28,16 +36,20 @@ if ($search) {
 } elseif ($categoryID) {
     $result = $db->query("SELECT * FROM videos WHERE category_id=$categoryID ORDER BY views DESC");
 } else {
-    $result = $db->query("SELECT * FROM videos ORDER BY views DESC");
+    $result = $db->query("SELECT * FROM videos ORDER BY views DESC LIMIT $offset, $limit");
     // print_r($result);
 }
 
 
 if ($result->num_rows > 0) {
     $videos = $result->fetch_all(MYSQLI_ASSOC);
-} else {
-    echo "there is no video with this name or title.";
 }
+
+$count = $db->query("SELECT COUNT(id) FROM videos")->fetch_array();
+print_r($count[0]);
+$totalVideos = $count[0];
+$totalPages = ceil($totalVideos / $limit);
+
 
 // view count
 if ($videoId) {
